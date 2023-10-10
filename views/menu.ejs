@@ -17,10 +17,28 @@
             </li>
         </ul>
         <ul class="navbar-nav d-flex">
-            <li class="nav-item">
+            <li class="nav-item" id="login">
                 <a class="nav-link active" aria-current="page" href="/users/login">LOGIN</a>
+            </li>
+            <li class="nav-item" style="display:none;" id="mypage">
+                <a class="nav-link active" aria-current="page" href="/users/mypage">uid</a>
+            </li>
+            <li class="nav-item" style="display:none;" id="logout">
+                <a class="nav-link active" aria-current="page" href="/users/logout">LOGOUT</a>
             </li>
         </ul>
       </div>
     </div>
   </nav>
+  <script>
+    if(sessionStorage.getItem("uid")){
+        $("#login, #mypage, #logout").toggle();
+        $("#mypage a").html(sessionStorage.getItem("uid") + "님");
+    }
+
+    $("#logout").on("click", "a", function(e){
+        e.preventDefault();
+        sessionStorage.clear();
+        location.href="/";
+    });
+  </script>

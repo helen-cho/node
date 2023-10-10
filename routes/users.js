@@ -19,4 +19,24 @@ router.get('/', function(req, res){
 router.get('/login', function(req, res){
     res.render('index', {title:'로그인', pageName:'users/login.ejs'});
 });
+
+//로그인체크
+router.post('/login', function(req, res){
+    const uid=req.body.uid;
+    const upass=req.body.upass;
+    console.log(uid, upass);
+    let result=0; //유저가 없을때
+    const sql="select * from users where uid=?";
+    db.get().query(sql, [uid], function(err, rows){
+        console.log(rows[0]);
+        if(rows[0]){
+            if(rows[0].upass==upass){
+                result=1; //성공
+            }else{
+                result=2; //비밀번호불일치
+            }
+        }
+        res.send({result:result});
+    });
+});
 module.exports = router;
