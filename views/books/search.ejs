@@ -3,3 +3,14 @@
         <h1 class="text-center">도서검색</h1>
     </div>
 </div>
+<script>
+    $.ajax({
+        type:"get",
+        headers:{"Authorization":"KakaoAK d98342bfb3d10bd8a8d18f10982fe1c8"},
+        url:"https://dapi.kakao.com/v3/search/book?target=title",
+        data:{query:"노드", page:1, size:5},
+        success:function(data){
+            console.log(data);
+        }
+    });
+</script>
