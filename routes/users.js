@@ -15,4 +15,8 @@ router.get('/', function(req, res){
     res.render('index', {title:'사용자 목록', pageName:'users/list.ejs'})
 });
 
+//로그인 페이지
+router.get('/login', function(req, res){
+    res.render('index', {title:'로그인', pageName:'users/login.ejs'});
+});
 module.exports = router;
