@@ -26,12 +26,22 @@
     <table class="table table-striped">
     {{#each documents}}
         <tr>
-            <td><img src="{{thumbnail}}" width="50"></td>
+            <td><img src="{{isImage thumbnail}}" width="50"></td>
             <td>{{title}}</td>
             <td>{{price}}</td>
         </tr>    
     {{/each}}
     </table>
+</script>
+<script>
+    //이미지유무 체크
+    Handlebars.registerHelper("isImage", function(image){
+        if(image){
+            return image;
+        }else{
+            return "http://via.placeholder.com/170x250";
+        }
+    })
 </script>
 <script>
     let query="노드";
@@ -71,6 +81,12 @@
                 $("#div_books").html(temp(data));
                 const last=Math.ceil(data.meta.pageable_count/5);
                 $("#span_page").html(`${page}/${last}`);
+
+                if(page==1) $("#prev").attr("disabled", true);
+                else $("#prev").attr("disabled", false);
+
+                if(data.meta.is_end) $("#next").attr("disabled", true);
+                else $("#next").attr("disabled", false);
             }
         });
     }   
