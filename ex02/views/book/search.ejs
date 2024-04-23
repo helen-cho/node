@@ -44,6 +44,12 @@
     let page=1;
     getData();
     
+    //이미지를 클릭한 경우
+    $("#div_book").on("click", "img", function(){
+        const id=$(this).attr("id");
+        $("#modal" + id).modal("show");
+    });
+
     //다음버튼을 클릭한경우
     $("#next").on("click", function(){
         page++;
