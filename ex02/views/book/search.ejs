@@ -1,0 +1,36 @@
+<h1><%=title%></h1>
+<div id="div_book" class="row"></div>
+<!--도서 템플릿-->
+<script id="temp_book" type="X-handlebars-template">
+{{#each documents}}
+    <div class="col-6 col-md-4 col-lg-2>
+        <div class="card">
+            <div class="card-body">
+                <img src={{thumbnail}} width="90%">
+            </div>
+            <div class="card-footer">
+                <div class="ellipsis title">{{title}}</div>
+            </div>
+        </div>        
+    </div>    
+{{/each}}
+</script>
+
+<script>
+    getData();
+    function getData(){
+        $.ajax({
+            type:"get",
+            url:"https://dapi.kakao.com/v3/search/book?target=title",
+            dataType:"json",
+            data:{query:"자바", size:6, page:1},
+            headers:{"Authorization":"KakaoAK 54b6688221dead45827042df7e297c2d"},
+            success:function(data){
+                //alert("성공");
+                console.log(data);
+                const temp=Handlebars.compile($("#temp_book").html());
+                $("#div_book").html(temp(data));
+            }
+        });
+    }
+</script>
