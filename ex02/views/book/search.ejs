@@ -56,6 +56,12 @@
         getData();
     });
 
+    //이전버튼을 클릭한경우
+        $("#prev").on("click", function(){
+        page--;
+        getData();
+    });
+
     $(frm).on("submit", function(e){
         e.preventDefault();
         query=$(frm.query).val();
