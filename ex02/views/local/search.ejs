@@ -37,7 +37,7 @@
         page--;
         getData();
     });
-    
+
     //다음버튼을 클릭한경우
     $("#next").on("click", function(){
         page++;
@@ -68,7 +68,7 @@
                 const temp=Handlebars.compile($("#temp_local").html());
                 $("#div_local").html(temp(data));
 
-                const last=Math.ceil(data.meta.pageable_count/6);
+                const last=Math.ceil(data.meta.pageable_count/5);
                 $("#page").html(`<b>${page} / ${last}</b>`);
 
                 if(page==1){
