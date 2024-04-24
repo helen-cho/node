@@ -19,6 +19,10 @@ router.post('/login', function (req, res) {
     console.log(uid, upass);
     const sql="select * from users where uid=?";
     db.get().query(sql, [uid], function(err, rows){
+        if(err){
+            console.log('에러:', err);
+            return;
+        }
         console.log(rows[0]);
         let result=0;
         if(rows[0]){
