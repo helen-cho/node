@@ -55,6 +55,7 @@
 
         var str=$(this).attr("address");
         var info=new kakao.maps.InfoWindow({ content:str });
+
         kakao.maps.event.addListener(marker, "mouseover", function() { 
             info.open(map, marker); 
         });
