@@ -43,7 +43,8 @@
 <script>
     const size=3;
     let page=1;
-    
+    let query=$(frm.query).val();
+
     getData();
     //이전버튼을 클릭한경우
         $("#prev").on("click", function(){
@@ -80,7 +81,7 @@
             url:"https://dapi.kakao.com/v2/search/blog",
             headers:{"Authorization":"KakaoAK 54b6688221dead45827042df7e297c2d"},
             dataType:"json",
-            data:{query:"뉴욕여행", size:size, page:page},
+            data:{query:query, size:size, page:page},
             success:function(data){
                 console.log(data);
                 const temp=Handlebars.compile($("#temp_blog").html());
