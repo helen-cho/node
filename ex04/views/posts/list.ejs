@@ -11,9 +11,9 @@
         {{#each .}}
             <tr>
                 <td>{{pid}}</td>
-                <td>{{title}}</td>
+                <td><a href="/posts/read?pid={{pid}}">{{title}}</a></td>
                 <td>{{writer}}</td>
-                <td>{{pdate}}</td>
+                <td>{{fdate}}</td>
             </tr>    
         {{/each}}
     </table>    
