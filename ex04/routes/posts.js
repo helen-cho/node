@@ -19,4 +19,21 @@ router.get('/list.json', function(req, res){
     });
 });
 
+//글쓰기 페이지로 이동
+router.get('/insert', function(req, res){
+    res.render('index.ejs', {title:'글쓰기', pageName:'posts/insert.ejs'})
+});
+
+//글을 DB저장
+router.post('/insert', function(req, res){
+    const title=req.body.title;
+    const contents=req.body.contents;
+    const uid=req.body.uid;
+    console.log(title, contents, uid);
+    const sql="insert into posts(title,contents,writer) values(?,?,?)";
+    db.get().query(sql, [title, contents, uid], function(err, rows){
+        res.redirect('/posts');
+    });
+});
+
 module.exports = router;
