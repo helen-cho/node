@@ -36,4 +36,13 @@ router.post('/login', function (req, res) {
     });
 });
 
+//마이페이지로 이동
+router.get("/mypage", function(req, res){
+    const uid=req.query.uid;
+    res.render('index.ejs',{
+        title:"마이페이지",
+        pageName:"users/mypage.ejs"        
+    });
+});
+
 module.exports = router;

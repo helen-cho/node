@@ -25,7 +25,7 @@
                     <a class="nav-link active" aria-current="page" href="/users/login">로그인</a>
                 </li>
                 <li class="nav-item" id="uid" style="display:none;">
-                    <a class="nav-link active" aria-current="page" href="/users/mypage"></a>
+                    <a class="nav-link active" aria-current="page" href="#"></a>
                 </li>
                 <li class="nav-item" id="logout" style="display:none;">
                     <a class="nav-link active" aria-current="page" href="#">로그아웃</a>
@@ -36,6 +36,11 @@
 </nav>
 <script>
     const uid=sessionStorage.getItem('uid');
+    $("#uid").on("click", "a", function(e){
+        e.preventDefault();
+        location.href="/users/mypage?uid=" + uid;
+    });
+
     if(uid){
         $("#login").hide();
         $("#logout").show();
