@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
 //게시판 목록 데이터 불러오기
 router.get('/list.json', function (req, res) {
     const page=req.query.page;
-    const size=10;
+    const size=parseInt(req.query.size);
     const start=(page-1) * size; 
     let sql = 'select *,date_format(pdate, "%Y-%m-%d %T") fdate '
         sql+= 'from posts order by pid desc limit ?, ?';
