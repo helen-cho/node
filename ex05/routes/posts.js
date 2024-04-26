@@ -12,12 +12,15 @@ router.get('/list.json', function (req, res) {
     const page=req.query.page;
     const size=parseInt(req.query.size);
     const start=(page-1) * size; 
+    const query="%" + req.query.query + "%";
     let sql = 'select *,date_format(pdate, "%Y-%m-%d %T") fdate '
-        sql+= 'from posts order by pid desc limit ?, ?';
-    db.get().query(sql,[start, size], function (err, rows) {
+        sql+= ' from posts ';
+        sql+= ' where title like ? or contents like ?';
+        sql+= ' order by pid desc limit ?, ?';
+    db.get().query(sql,[query, query, start, size], function (err, rows) {
         const documents=rows;
-        sql="select count(*) total from posts";
-        db.get().query(sql, function(err, rows){
+        sql="select count(*) total from posts where title like ? or contents like ?";
+        db.get().query(sql, [query, query], function(err, rows){
             const total=rows[0].total;
             res.send({documents, total});
         });

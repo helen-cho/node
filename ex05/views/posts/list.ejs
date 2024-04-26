@@ -1,6 +1,19 @@
 <h1><%=title%></h1>
-<div class="text-end mb-3" id="div-write" style="display:none;">
-    <a href="/posts/insert"><button class="btn btn-primary">글쓰기</button></a>
+<div class="row">
+    <div class="col-6 col-md-4">
+        <form name="frm">
+            <div class="input-group">
+                <input name="query" class="form-control" placeholder="검색어">
+                <button class="btn btn-primary">검색</button>
+            </div>
+        </form>
+    </div>
+    <div class="col pt-2">
+        <span id="total"></span>
+    </div>
+    <div class="col text-end mb-3" id="div-write" style="display:none;">
+        <a href="/posts/insert"><button class="btn btn-primary">글쓰기</button></a>
+    </div>
 </div>
 <div id="div_posts"></div>
 <div class="text-center">
@@ -26,6 +39,14 @@
 <script>
     let page=1;
     const size=5;
+    let query="";
+
+    $(frm).on("submit", function(e){
+        e.preventDefault();
+        query=$(frm.query).val();
+        page=1;
+        getData();
+    });
 
     //이전 버튼을 클릭한 경우
     $("#prev").on("click", function(){
@@ -51,17 +72,24 @@
             type:"get",
             url:"/posts/list.json",
             dateType:"json",
-            data:{page:page, size},
+            data:{page:page, size, query},
             success:function(data){
                 console.log(data);
                 const temp=Handlebars.compile($("#temp_posts").html());
                 $("#div_posts").html(temp(data));
 
-                $("#page").html(page);
+                $("#total").html(`<b>${data.total}</b>건`);
+                const last=Math.ceil(data.total/size);    
+                $("#page").html(`${page} / ${last}`);
                 if(page==1){
                     $("#prev").attr("disabled", true);
                 }else{
                     $("#prev").attr("disabled", false);
+                }
+                if(page==last){
+                    $("#next").attr("disabled", true);
+                }else{
+                    $("#next").attr("disabled", false);
                 }
             }
         })
