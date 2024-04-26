@@ -39,9 +39,26 @@ router.post('/login', function (req, res) {
 //마이페이지로 이동
 router.get("/mypage", function(req, res){
     const uid=req.query.uid;
-    res.render('index.ejs',{
-        title:"마이페이지",
-        pageName:"users/mypage.ejs"        
+    const sql="select * from users where uid=?";
+    db.get().query(sql, [uid], function(err, rows){
+        res.render('index.ejs',{
+            title:"마이페이지",
+            pageName:"users/mypage.ejs",
+            user:rows[0]     
+        });
+    });
+});
+
+//정보수정
+router.post('/update', function(req, res){
+    const uid=req.body.uid;
+    const uname=req.body.uname;
+    const phone=req.body.phone;
+    const address1=req.body.address1;
+    const address2=req.body.address2;
+    const sql="update users set uname=?,phone=?,address1=?,address2=? where uid=?";
+    db.get().query(sql,[uname,phone,address1,address2,uid],function(err, rows){
+        res.redirect('/');
     });
 });
 
