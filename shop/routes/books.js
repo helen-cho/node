@@ -30,7 +30,7 @@ router.post('/insert', function(req, res, next) {
 router.get('/list', function(req, res){
   const page=parseInt(req.query.page);
   const size=parseInt(req.query.size);
-  let sql ="select *,date_format(regdate,'%Y-%m-%d') fmtdate,format(price,0) fmtprice";
+  let sql ="select *,date_format(regdate,'%Y-%m-%d %T') fmtdate,format(price,0) fmtprice";
       sql+=" from books ";
       sql+=" order by bid desc";
       sql+=" limit ?,?";
@@ -42,6 +42,19 @@ router.get('/list', function(req, res){
       const count=rows[0].total;
       res.send({count, documents});
     })
+  });
+});
+
+//도서삭제
+router.post('/delete', function(req, res){
+  const bid=req.body.bid;
+  const sql="delete from books where bid=?";
+  db.get().query(sql, [bid], function(err, rows){
+    if(err){
+      res.send({result:0});
+    }else{
+      res.send({result:1});
+    }
   });
 });
 
