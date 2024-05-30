@@ -60,13 +60,16 @@ router.get('/list', function(req, res){
   const size=parseInt(req.query.size);
   const key=req.query.key;
   const word=req.query.word;
-  let sql ="select *,date_format(regdate,'%Y-%m-%d %T') fmtdate,format(price,0) fmtprice";
+  const uid=req.query.uid;
+  let sql ="select *,date_format(regdate,'%Y-%m-%d %T') fmtdate,format(price,0) fmtprice,";
+      sql+="(select count(*) from likes where books.bid=likes.bid) lcnt,";
+      sql+="(select count(*) from likes where books.bid=likes.bid and uid=?) ucnt"
       sql+=" from books ";
       sql+=` where ${key} like '%${word}%'`;
       sql+=" order by bid desc";
       sql+=" limit ?,?";
 
-  db.get().query(sql, [(page-1)*size, size], function(err, rows){
+  db.get().query(sql, [uid,(page-1)*size, size], function(err, rows){
     const documents = rows;
     sql = "select count(*) total from books";
     sql+=` where ${key} like '%${word}%'`;
@@ -109,6 +112,21 @@ router.post('/update', function(req, res){
   const sql="update books set title=?,price=?,author=?,contents=?,updatedate=now() where bid=?";
   db.get().query(sql, [title,price,author,contents,bid], function(err, rows){
     if(err) {
+      res.send({result:0});
+    }else{
+      res.send({result:1});
+    }
+  });
+});
+
+//좋아요추가
+router.post('/likes/insert', function(req, res){
+  const uid=req.body.uid;
+  const bid=req.body.bid;
+  const sql="insert into likes(uid,bid) values(?,?)";
+  db.get().query(sql, [uid, bid], function(err, rows){
+    if(err){
+      console.log('err.......', err);
       res.send({result:0});
     }else{
       res.send({result:1});
