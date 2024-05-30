@@ -62,4 +62,30 @@ router.post('/delete', function(req, res){
   });
 });
 
+//도서정보 Read
+router.get('/read/:bid', function(req, res){
+  const bid=req.params.bid;
+  const sql="select *,date_format(updatedate,'%Y-%m-%d %T') fmtdate from books where bid=?";
+  db.get().query(sql, [bid], function(err, rows){
+    res.send(rows[0]);
+  });
+});
+
+//도서정보 수정
+router.post('/update', function(req, res){
+  const bid=req.body.bid;
+  const title=req.body.title;
+  const price=req.body.price;
+  const author=req.body.author;
+  const contents=req.body.contents;
+  const sql="update books set title=?,price=?,author=?,contents=?,updatedate=now() where bid=?";
+  db.get().query(sql, [title,price,author,contents,bid], function(err, rows){
+    if(err) {
+      res.send({result:0});
+    }else{
+      res.send({result:1});
+    }
+  });
+});
+
 module.exports = router;
