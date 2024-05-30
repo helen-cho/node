@@ -1,6 +1,34 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../db');
+var multer = require('multer');
+
+var upload = multer({
+  storage:multer.diskStorage({
+    destination:(req, file, done)=>{
+      done(null, './public/books')
+    },
+    filename:(req, file, done)=>{
+      var filename=Date.now() + '.jpg';
+      done(null, filename);
+    }
+  })
+});
+
+//이미지업로드
+router.post('/upload',upload.single('file'), function(req, res){
+  const bid=req.body.bid;
+  const filename="/books/" + req.file.filename;
+  const sql="update books set bigimage=?, updateDate=now() where bid=?";
+  db.get().query(sql, [filename, bid], function(err, rows){
+    if(err){
+      console.log('err...........', err);
+      res.send({result:0});
+    }else{
+      res.send({result:1});
+    }
+  });
+});
 
 /*도서등록*/
 router.post('/insert', function(req, res, next) {
