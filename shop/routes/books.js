@@ -30,14 +30,18 @@ router.post('/insert', function(req, res, next) {
 router.get('/list', function(req, res){
   const page=parseInt(req.query.page);
   const size=parseInt(req.query.size);
+  const key=req.query.key;
+  const word=req.query.word;
   let sql ="select *,date_format(regdate,'%Y-%m-%d %T') fmtdate,format(price,0) fmtprice";
       sql+=" from books ";
+      sql+=` where ${key} like '%${word}%'`;
       sql+=" order by bid desc";
       sql+=" limit ?,?";
 
   db.get().query(sql, [(page-1)*size, size], function(err, rows){
     const documents = rows;
     sql = "select count(*) total from books";
+    sql+=` where ${key} like '%${word}%'`;
     db.get().query(sql, function(err, rows){
       const count=rows[0].total;
       res.send({count, documents});
