@@ -22,4 +22,22 @@ router.post('/insert', function(req, res){
   });
 });
 
+//리뷰목록 테스트 /review/list/113?page=1&size=2
+router.get('/list/:bid', function(req, res){
+  const bid=req.params.bid;
+  const page=parseInt(req.query.page);
+  const size=parseInt(req.query.size);
+  let sql ="select * from view_review";
+      sql+=" where bid=?";
+      sql+=" order by rid desc";
+      sql+=" limit ?,?";
+  db.get().query(sql, [bid, (page-1)*size, size], function(err, rows){
+    const documents=rows;
+    sql="select count(*) count from review where bid=?";
+    db.get().query(sql, [bid], function(err, rows){
+      res.send({documents, count:rows[0].count});
+    });
+  });    
+});
+
 module.exports = router;
