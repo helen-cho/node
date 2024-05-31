@@ -40,4 +40,31 @@ router.get('/list/:bid', function(req, res){
   });    
 });
 
+//리뷰삭제
+router.post('/delete/:rid', function(req, res){
+  const rid=req.params.rid;
+  const sql="delete from review where rid=?";
+  db.get().query(sql, [rid], function(err, rows){
+    if(err){
+      res.send({result:0});
+    }else{
+      res.send({result:1});
+    }
+  });
+});
+
+//리뷰수정
+router.post('/update', function(req, res){
+  const rid=req.body.rid;
+  const contents=req.body.contents;
+  const sql="update review set contents=? where rid=?";
+  db.get().query(sql, [contents, rid], function(err, rows){
+    if(err){
+      res.send({result:0});
+    }else{
+      res.send({result:1});
+    }
+  });
+});
+
 module.exports = router;
