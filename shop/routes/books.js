@@ -134,4 +134,18 @@ router.post('/likes/insert', function(req, res){
   });
 });
 
+//좋아요취소
+router.post('/likes/delete', function(req, res){
+  const uid=req.body.uid;
+  const bid=req.body.bid;
+  const sql="delete from likes where uid=? and bid=?";
+  db.get().query(sql, [uid, bid], function(err, rows){
+    if(err){
+      res.send({result:0});
+    }else{
+      res.send({result:1});
+    }
+  });
+});
+
 module.exports = router;
