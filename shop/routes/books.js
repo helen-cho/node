@@ -93,12 +93,22 @@ router.post('/delete', function(req, res){
   });
 });
 
-//도서정보 Read
+//도서정보 Read 테스트:/books/read/112?uid=green
 router.get('/read/:bid', function(req, res){
   const bid=req.params.bid;
-  const sql="select *,date_format(updatedate,'%Y-%m-%d %T') fmtdate from books where bid=?";
-  db.get().query(sql, [bid], function(err, rows){
-    res.send(rows[0]);
+  const uid=req.query.uid;
+  console.log('..............', bid, uid);
+  let sql ="select *,date_format(regdate,'%Y-%m-%d') fmtdate,format(price,0) fmtprice,";
+      sql+="(select count(*) from likes where books.bid=likes.bid) lcnt,";
+      sql+="(select count(*) from likes where books.bid=likes.bid and uid=?) ucnt"
+      sql+=" from books where bid=?";
+  //const sql="select * from books where bid=?";
+  db.get().query(sql, [uid, bid], function(err, rows){
+    if(err){
+      console.log('.................', err)
+    }else{
+      res.send(rows[0]);
+    }
   });
 });
 
