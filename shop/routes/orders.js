@@ -43,4 +43,28 @@ router.post('/insert', function(req, res){
   });
 });
 
+//사용자별 주문목록
+router.get('/list', function(req, res){
+  const uid=req.query.uid;
+  let sql="select *,date_format(pdate,'%Y-%m-%d %T') as fmtdate,";
+  sql+=" format(sum,0) fmtsum";
+  sql+=" from purchase where uid=?";
+  sql+=" order by pdate desc";
+  db.get().query(sql, [uid], function(err, rows){
+    res.send(rows);
+  });
+});
+
+//특정주문의 주문상품목록
+router.get('/books', function(req, res){
+  const pid=req.query.pid;
+  let sql="select o.*, b.title, b.image,";
+  sql+=" format(o.price,0) fmtprice, format(o.price*o.qnt,0) fmtsum"
+  sql+=" from orders o, books b";
+  sql+=" where o.bid=b.bid and pid=?";
+  db.get().query(sql, [pid], function(err, rows){
+    res.send(rows);
+  });
+});
+
 module.exports = router;
