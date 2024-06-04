@@ -81,7 +81,17 @@ router.get('/admin/list', function(req, res){
   sql+=" order by pdate desc";
   sql+=" limit ?, ?;"
   db.get().query(sql, [`%${word}%`, (page-1)*size, size], function(err, rows){
-    res.send(rows);
+    let documents = rows;
+    sql="select count(*) count from purchase";
+    sql+=` where ${key} like ?`
+    db.get().query(sql, [`%${word}%`], function(err, rows){
+      const count=rows[0].count;
+      if(count==0){
+        res.send({documents:[], count});
+      }else{
+        res.send({documents, count});
+      }
+    });
   });
 });
 
