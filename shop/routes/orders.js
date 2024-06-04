@@ -67,4 +67,22 @@ router.get('/books', function(req, res){
   });
 });
 
+//관리자 주문목록
+router.get('/admin/list', function(req, res){
+  const key=req.query.key;
+  const word=req.query.word;
+  const page=parseInt(req.query.page);
+  const size=parseInt(req.query.size);
+  let sql="select *, ";
+  sql+=" date_format(pdate,'%Y-%m-%d %T') as fmtdate,";
+  sql+=" format(sum,0) fmtsum";
+  sql+=" from purchase";
+  sql+=` where ${key} like ?`
+  sql+=" order by pdate desc";
+  sql+=" limit ?, ?;"
+  db.get().query(sql, [`%${word}%`, (page-1)*size, size], function(err, rows){
+    res.send(rows);
+  });
+});
+
 module.exports = router;
