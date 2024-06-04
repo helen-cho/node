@@ -85,4 +85,19 @@ router.get('/admin/list', function(req, res){
   });
 });
 
+//주문상태변경
+router.post('/status', function(req, res){
+  const pid=req.body.pid;
+  const status=req.body.status;
+  const sql="update purchase set status=? where pid=?";
+  db.get().query(sql, [status, pid], function(err, rows){
+    if(err){
+      console.log('err.............', err);
+      res.send({result:0});
+    }else{
+      res.send({result:1});
+    }
+  });
+});
+
 module.exports = router;
